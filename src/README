@@ -181,3 +181,40 @@ This is a textual representation of the planner dates.
 Extra Credit: LenientSchedulingStrategy class, and then run it on the PlannerRunner
 
 
+Final Extra Credit README:
+
+Level 0: Changing the Color of Events
+We implemented the "host" color mode to distinguish events hosted by the current user.
+- Originally, we did not specify the host before in our model. The host is the first user in the
+invitees array.
+- We added the parameter hostId to the Event class and a getter method for hostId.
+- To complete the level, we made a DefaultEventDrawer which implements EventDrawer interface to
+utilize the draw function. We then pasted the draw logic without modifying anything, just adding
+logic to change the color based on if it is a host event.
+- We added a button in the frame to help toggle the host. Everything else in the frame is the same.
+
+Files Affected:
+- DefaultEventDrawer
+- SaturdayViewFrame
+- PlannerSystem
+
+
+Level 1: Week Starting on Saturday
+- We made a new class called SaturdayPlanner which extends our previous model, PlannerSystem, since
+the classes use many of the same implementations of the same methods. This class overrides a new
+method called getEventsForWeekStarting which returns a new list of events starting from a specific
+time from that user's schedule
+
+Files Affected:
+-SaturdayPlanner
+
+
+Level 2: Visualizing Week Starting on Saturday
+- We created a new GUI class called SaturdayViewFrame which implements the same classes as our
+mainSystemFrame. We modified the drawing logic since the schedule starts on Saturday now. We also
+had to get the new filtered events which start from Saturday.
+
+Files Affected:
+-SaturdayViewFrame
+
+Level 3: Not able to implement

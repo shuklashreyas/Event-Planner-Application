@@ -121,6 +121,7 @@ public class EventFrame extends JFrame implements IEventView {
             readOnlyModel.addEventToUserSchedule(user.getId(), event);
 
             MainSystemFrame.refreshScheduleDisplay();
+            SaturdayViewFrame.refreshScheduleDisplay();
 
             System.out.println("Event created: " + event);
 
@@ -147,6 +148,7 @@ public class EventFrame extends JFrame implements IEventView {
                   new ArrayList<>(), user.getName());
           //readOnlyModel.modifyEvent(user, event, modifiedEvent);
           MainSystemFrame.refreshScheduleDisplay();
+          SaturdayViewFrame.refreshScheduleDisplay();
           System.out.println("Event modified: " + modifiedEvent);
         }
       }
@@ -163,6 +165,7 @@ public class EventFrame extends JFrame implements IEventView {
           Event event = user.getSchedule().getEvents().get(userList.getSelectedIndex());
           user.getSchedule().getEvents().remove(event);
           MainSystemFrame.refreshScheduleDisplay();
+          SaturdayViewFrame.refreshScheduleDisplay();
           System.out.println("Event removed: " + event);
 
         }

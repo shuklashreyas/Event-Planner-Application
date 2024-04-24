@@ -1,12 +1,20 @@
 package view;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import java.io.File;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -15,14 +23,29 @@ import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.JMenu;
 
 import model.Event;
-import model.IReadOnlyModel;
+
 import model.PlannerSystem;
 import model.SaturdayPlanner;
 import model.User;
 
+/**
+ * This class represents the SaturdayViewFrame.
+ * This class is used to display the schedule for the week.
+ * Starting from Saturday to Friday.
+ */
 public class SaturdayViewFrame extends JFrame implements IPlannerView, IPlannerViewListener {
   private static JPanel schedulePanel;
   private JButton createEventButton;
@@ -30,12 +53,10 @@ public class SaturdayViewFrame extends JFrame implements IPlannerView, IPlannerV
 
   private JButton toggleHostButton;
   private JComboBox<String> userComboBox;
-  private SaturdayPlanner readOnlyModel; // Use SaturdayPlanner specifically for the view
+  private final SaturdayPlanner readOnlyModel; // Use SaturdayPlanner specifically for the view
 
   private List<Event> currentEvents;
   private IPlannerViewListener viewListener;
-
-  private EventDrawer eventDrawer;
 
   private boolean hostColorModeEnabled = false;
 
@@ -46,7 +67,7 @@ public class SaturdayViewFrame extends JFrame implements IPlannerView, IPlannerV
    */
   public SaturdayViewFrame(SaturdayPlanner model) {
     this.readOnlyModel = model;
-    this.eventDrawer = new DefaultEventDrawer();
+    EventDrawer eventDrawer = new DefaultEventDrawer();
     initializeMenu();
     initializeSchedulePanel();
     initializeButtons();
@@ -99,8 +120,7 @@ public class SaturdayViewFrame extends JFrame implements IPlannerView, IPlannerV
         if (selectedUser != null) {
           User user = readOnlyModel.getUserByName(selectedUser);
           if (user != null) {
-            currentEvents = readOnlyModel.getEventsForWeekStarting(user,
-                    LocalDate.of(2024, 4, 27));
+            currentEvents = readOnlyModel.getEventsForWeekStarting(user, LocalDate.of(2024, 4, 27));
             if (currentEvents != null) {
               schedulePanel.repaint();
             } else {
@@ -132,6 +152,7 @@ public class SaturdayViewFrame extends JFrame implements IPlannerView, IPlannerV
     menuBar.add(fileMenu);
     setJMenuBar(menuBar);
   }
+
   private void drawEvent(Graphics g, Event event, int dayIndex) {
     Graphics2D g2d = (Graphics2D) g;
     Dimension size = new Dimension(getWidth() / 7, getHeight());
@@ -159,6 +180,7 @@ public class SaturdayViewFrame extends JFrame implements IPlannerView, IPlannerV
             DayOfWeek dayOfWeek = event.getStartTime().getDayOfWeek();
             int dayIndex = (dayOfWeek.getValue() + 1) % 7;
             drawEvent(g, event, dayIndex);
+            System.out.println("Drawing event: " + event.getName());
           }
         }
       }
@@ -216,8 +238,8 @@ public class SaturdayViewFrame extends JFrame implements IPlannerView, IPlannerV
         DayOfWeek dayOfWeekEventEnd = event.getEndTime().getDayOfWeek();
         DayOfWeek dayClicked = DayOfWeek.of(clickedDayIndex);
 
-        boolean isSameDay = (dayOfWeekEventStart.equals(dayClicked) || dayOfWeekEventEnd.
-                equals(dayClicked));
+        boolean isSameDay = (dayOfWeekEventStart.equals(dayClicked)
+                || dayOfWeekEventEnd.equals(dayClicked));
         boolean isSameTime = (timeClicked.equals(event.getStartTime().toLocalTime())
                 || timeClicked.isAfter(event.getStartTime().toLocalTime()))
                 && (timeClicked.isBefore(event.getEndTime().toLocalTime()));
@@ -326,8 +348,8 @@ public class SaturdayViewFrame extends JFrame implements IPlannerView, IPlannerV
 
       PlannerSystem plannerSystem = new PlannerSystem();
       User currentUser = new User("1", "Host");
-      boolean isUploaded = plannerSystem.uploadSchedule(selectedFile.getAbsolutePath(),
-              currentUser);
+      boolean isUploaded = plannerSystem.
+              uploadSchedule(selectedFile.getAbsolutePath(), currentUser);
 
       for (Event event : currentUser.getSchedule().getEvents()) {
         System.out.println(event.getName());

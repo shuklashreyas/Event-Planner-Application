@@ -20,8 +20,7 @@ public class Event implements IEvent {
 
   private String hostId;
 
-  private Duration Duration;
-
+  private Duration durationMins;
 
 
   /**
@@ -46,10 +45,19 @@ public class Event implements IEvent {
     this.hostId = hostId;
   }
 
+  /**
+   * Constructor for the Event class.
+   *
+   * @param name     the name of the event
+   * @param duration the duration of the event
+   * @param location the location of the event
+   * @param isOnline whether the event is online
+   * @param invitees the invitees of the event
+   */
   public Event(String name, Duration duration,
                String location, boolean isOnline, List<String> invitees) {
     this.name = name;
-    this.Duration = duration;
+    this.durationMins = duration;
     this.location = location;
     this.isOnline = isOnline;
     this.invitees = invitees;
@@ -139,7 +147,11 @@ public class Event implements IEvent {
 
   @Override
   public long getDuration() {
-    return Duration.toMinutes();
+    return durationMins.toMinutes();
+  }
+
+  public void setDuration(Duration duration) {
+    this.durationMins = duration;
   }
 
   @Override
@@ -157,16 +169,12 @@ public class Event implements IEvent {
   public String toString() {
     return
             " name = '" + name + '\'' +
-            ", startTime = " + startTime +
-            ", endTime = " + endTime +
-            ", location = " + location + '\'' +
-            ", isOnline = " + isOnline +
-            ", invitees = " + invitees +
-            ", hostId = " + hostId ;
+                    ", startTime = " + startTime +
+                    ", endTime = " + endTime +
+                    ", location = " + location + '\'' +
+                    ", isOnline = " + isOnline +
+                    ", invitees = " + invitees +
+                    ", hostId = " + hostId;
 
-  }
-
-  public void setDuration(Duration duration) {
-    Duration = duration;
   }
 }

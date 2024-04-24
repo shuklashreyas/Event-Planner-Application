@@ -1,6 +1,9 @@
 package view;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import model.Event;
 
@@ -18,10 +21,10 @@ public class DefaultEventDrawer implements EventDrawer {
 
     // Calculate the position and size of the event rectangle
     int startX = event.getStartTime().getDayOfWeek().getValue() % 7 * size.width;
-    int startY = event.getStartTime().getHour() * size.height / 24 +
-            event.getStartTime().getMinute() * size.height / 1440;
-    int endY = event.getEndTime().getHour() * size.height / 24 +
-            event.getEndTime().getMinute() * size.height / 1440;
+    int startY = event.getStartTime().getHour() * size.height / 24
+            + event.getStartTime().getMinute() * size.height / 1440;
+    int endY = event.getEndTime().getHour() * size.height / 24
+            + event.getEndTime().getMinute() * size.height / 1440;
     int height = endY - startY;
 
     // Set a default color for non-host events

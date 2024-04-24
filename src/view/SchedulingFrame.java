@@ -3,10 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.DayOfWeek;
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -21,7 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 
-import model.AnytimeSchedulingStrategy;
 import model.Event;
 import model.IReadOnlyModel;
 import model.PlannerSystem;
@@ -33,7 +29,6 @@ import model.WorkHoursSchedulingStrategy;
  * This is the new frame when a person clicks on the schedule event button.
  */
 public class SchedulingFrame extends JFrame {
-  private IReadOnlyModel model;
   private final WorkHoursSchedulingStrategy strat;
   private JTextField eventNameField;
   private JTextField locationField;
@@ -47,7 +42,6 @@ public class SchedulingFrame extends JFrame {
    */
   public SchedulingFrame(IReadOnlyModel model) {
 
-    this.model = model;
     this.strat = new WorkHoursSchedulingStrategy();
 
 
@@ -105,7 +99,7 @@ public class SchedulingFrame extends JFrame {
           System.out.println(s);
         }
 
-        MainSystemFrame.refreshScheduleDisplay();
+        //MainSystemFrame.refreshScheduleDisplay();
       }
     });
 

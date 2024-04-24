@@ -48,18 +48,14 @@ import model.User;
  */
 public class MainSystemFrame extends JFrame implements IPlannerView, IPlannerViewListener {
   private static JPanel schedulePanel;
+  private final IReadOnlyModel readOnlyModel;
+  private final EventDrawer eventDrawer;
   private JButton createEventButton;
   private JButton scheduleEventButton;
-
   private JButton toggleHostButton;
   private JComboBox<String> userComboBox;
-  private final IReadOnlyModel readOnlyModel;
-
   private List<Event> currentEvents;
   private IPlannerViewListener viewListener;
-
-  private final EventDrawer eventDrawer;
-
   private PlannerSystem model;
 
   private boolean hostColorModeEnabled = false;
@@ -230,13 +226,17 @@ public class MainSystemFrame extends JFrame implements IPlannerView, IPlannerVie
         }
       }
 
-      private boolean eventOccursDuringClick(Event event, int clickedDayIndex, LocalTime timeClicked) {
+      private boolean eventOccursDuringClick(Event event, int clickedDayIndex,
+                                             LocalTime timeClicked) {
         DayOfWeek dayOfWeekEventStart = event.getStartTime().getDayOfWeek();
         DayOfWeek dayOfWeekEventEnd = event.getEndTime().getDayOfWeek();
         DayOfWeek dayClicked = DayOfWeek.of(clickedDayIndex);
 
-        boolean isSameDay = (dayOfWeekEventStart.equals(dayClicked) || dayOfWeekEventEnd.equals(dayClicked));
-        boolean isSameTime = (timeClicked.equals(event.getStartTime().toLocalTime()) || timeClicked.isAfter(event.getStartTime().toLocalTime())) && (timeClicked.isBefore(event.getEndTime().toLocalTime()));
+        boolean isSameDay = (dayOfWeekEventStart.equals(dayClicked)
+                || dayOfWeekEventEnd.equals(dayClicked));
+        boolean isSameTime = (timeClicked.equals(event.getStartTime().toLocalTime())
+                || timeClicked.isAfter(event.getStartTime().toLocalTime()))
+                && (timeClicked.isBefore(event.getEndTime().toLocalTime()));
 
         return isSameDay && isSameTime;
       }
@@ -342,7 +342,8 @@ public class MainSystemFrame extends JFrame implements IPlannerView, IPlannerVie
 
       PlannerSystem plannerSystem = new PlannerSystem();
       User currentUser = new User("1", "Host");
-      boolean isUploaded = plannerSystem.uploadSchedule(selectedFile.getAbsolutePath(), currentUser);
+      boolean isUploaded = plannerSystem.
+              uploadSchedule(selectedFile.getAbsolutePath(), currentUser);
 
       for (Event event : currentUser.getSchedule().getEvents()) {
         System.out.println(event.getName());

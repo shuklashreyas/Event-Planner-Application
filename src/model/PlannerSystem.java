@@ -97,13 +97,16 @@ public class PlannerSystem implements IPlannerSystemModel {
         Node nNode = nList.item(i);
         if (nNode.getNodeType() == Node.ELEMENT_NODE) {
           Element eElement = (Element) nNode;
-          String name = eElement.getElementsByTagName("name").item(0).getTextContent().replace("\"", "");
+          String name = eElement.getElementsByTagName("name")
+                  .item(0).getTextContent().replace("\"", "");
           String startDay = eElement.getElementsByTagName("start-day").item(0).getTextContent();
           String startTimeString = eElement.getElementsByTagName("start").item(0).getTextContent();
           String endDay = eElement.getElementsByTagName("end-day").item(0).getTextContent();
           String endTimeString = eElement.getElementsByTagName("end").item(0).getTextContent();
-          boolean isOnline = Boolean.parseBoolean(eElement.getElementsByTagName("online").item(0).getTextContent());
-          String place = eElement.getElementsByTagName("place").item(0).getTextContent().replace("\"", "");
+          boolean isOnline = Boolean.parseBoolean(eElement.getElementsByTagName("online").
+                  item(0).getTextContent());
+          String place = eElement.getElementsByTagName("place").
+                  item(0).getTextContent().replace("\"", "");
           ArrayList<String> invitees = new ArrayList<>();
           String hostId = null;
 
