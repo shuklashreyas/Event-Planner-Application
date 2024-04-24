@@ -1,0 +1,181 @@
+Overview:
+The Event Planner Application is designed to manage and automate the scheduling of events for
+users. The purpose is to create a schedule that avoids overlapping events by creating an easier
+way to create, modify, remove, and view events. Some background knowledge needed are basic
+knowledge of event planning and common scheduling terms such as start and end time. The
+extensibility envisioned focuses on adding more complex scheduling features in the future but it
+currently focuses on basic event management and schedule automation.
+
+
+Quick Start:
+To get started with the Event Planner Application, you first need to create a User and an Event.
+An example is shown below:
+User user = new User("1", "John Doe");
+Event event = new Event("Meeting", LocalDateTime.now(), LocalDateTime.now().plusHours(1),
+                        "Conference Room", false, new ArrayList<>(), new ArrayList<>());
+user.getSchedule().addEvent(event);
+
+This snippet demonstrates how to create a user, create an event, and add the event to the user's
+schedule.
+
+
+Key Components and Subcomponents:
+- plannerSystem
+  The plannerSystem is the main component for managing users and their events. It provides the
+  core functions for scheduling events, including uploading schedules from XML files, saving
+  schedules, and performing other main functions like creating, modifying, removing, and
+  auto-scheduling events. It interfaces with all other components to ensure smooth operation of
+  the application.
+
+- Event:
+This component represents a scheduled event, with details such as event name, start and end times,
+location, and whether it's online or in-person.
+
+- User:
+This component is for user details and their schedule. Each user has a unique ID and a name,
+along with a Schedule object that holds their events.
+
+- Schedule:
+This component is a collection of Event objects. It provides methods to add, remove,
+and list events.
+
+- Utils:
+This component has the utility methods for reading from and writing to XML files, and other
+utility operations that support the main functionalities of the application.
+
+- textualView:
+This component is used to display the schedules of each user in a readable format. It formats the
+event details and schedules into the appropriate output. It the provides the name, time, location,
+online status, and invitees, making it easier for users to understand their schedules at a glance.
+
+
+Source Organization:
+The codebase is organized into the model package:
+/model/User.java: Defines the User class with user details and schedule.
+/model/Event.java: Represents individual events.
+/model/Schedule.java: Manages a collection of events for a user.
+/model/plannerSystem.java: Core system for managing users and their events.
+/model/plannerSystemModel.java: Interface defining the operations supported by the planner system.
+
+There is also the view package which contains the textualView:
+/view/textualView.java: Implements the plannerView interface to display users' schedules in a text
+format. It formats and prints schedule and event details to the console in a specific format.
+
+The test package contains the tests for the other packages:
+/test/model/: Contains unit tests for classes within the model package, ensuring that the
+logic and data models behave as expected as well as tests for edge cases.
+
+/test/view/: Contains tests for the textualView class, verifying that the presentation
+layer correctly formats and displays data.
+
+Class Invariance:
+User: The user ID and name are immutable and unique. Every User in the plannerSystem must have
+a unique identifier. This ensures that no two users can have the same ID, preserving the integrity
+of user data and schedules.
+
+CHANGES FOR PART 2:
+We noticed a functionality that we needed to utilize was missing from our system which was the
+ability to retrieve and compile a list of events form all users' schedules. In many applications,
+there's a need to view or analyze events across multiple schedules including finding a common
+time slot or a comprehensive event timeline. To address this, we made a method called getEvents
+in the PlannerSystem class.
+It initializes an empty list of events and then iterates over a collection of user objects. For
+each user, it retrieves the users' schedule and adds all th events from the schedule to the initial
+list. The method returns the list of all the events that are scheduled across the system.
+
+New Classes:
+- EventFrame:
+This class is used to represent a GUI frame that is specifically designed for creating, modifying,
+or removing events within the planner system.
+
+- MainSystemFrame
+This class is the main frame for the planner system's GUI. It initializes and displays the main
+components of the system such as the menu bars and the buttons for creating and scheduling events.
+
+New Interfaces:
+- IEventPanelView
+This interface is intended to have the requirements for the a view component that is used to display
+event details within a panel.
+
+- IEventView
+This interface is intended to serve as a contract to create views that display or interact with
+the event data.
+
+- IMainSystemView
+This interface is intended to outline the structure and functionality required for the main view of
+the system.
+
+- IScheduleView
+This interface is intended to define the necessary parts of the view component that displays
+schedules.
+
+
+Changes to Part 3:
+We realized that there needed to be an interface for the strategies so we added an interface and
+created the AnytimeSchedulingStrategy and WorkHoursSchedulingStrategy classes. This is to help
+separate and organize these strategies to be called on and use later on more easily and for easier
+code readability. We also mad a method called createEventBasedOnStrategy in the planner system and
+the interface to more easily create events for specific strategies. Finally, we added a parameter to
+the PlannerSystem class which was the scheduling strategy so that a strategy could be associated
+with the schedule. We added two new methods to accompany this as well:
+
+New Methods:
+- setSchedulingStrategy:
+A method that allows the dynamic setting of a scheduling strategy according to user choices
+
+- scheduleEventForUser:
+A method that schedules an event for a user and utilizes the currently set scheduling strategy
+
+
+New Interfaces:
+- IPlannerView:
+This interface is a general contract for the planner's view component and gives them a way to update
+the schedule display and set listeners for user actions.
+
+- SchedulingStrategy:
+Defines a strategy pattern that allows the implementation of different scheduling algorithms that
+can be specifically chosen and applied.
+
+- IScheduleView:
+Intended interface for views that deal with displaying schedules and distinguishing them from other
+types of views within the application
+
+- PlannerViewListener:
+An interface to define callbacks for user actions captured by the view components,
+which are then handled by the PlannerController.
+
+
+New Classes:
+- AnytimeSchedulingStrategy:
+Implementation of the SchedulingStrategy interface. A specific logic to schedule events at any
+available time
+
+- WorkHoursSchedulingStrategy:
+Implementation of the SchedulingStrategy interface. A specific logic to schedule events within
+standard work hours.
+
+- SearchingStrategy:
+Class that is utilized within the scheduling strategies to find suitable time slots for events based
+on the criteria. It has the logic that iterates through the possible times and checks availability.
+
+- Planner Controller:
+Acts as a controller for the planner application. It manages the flow of data between the Model and
+View by handling user inputs and responding to Model updates. It ensures the UI reflects the current
+state of the application.
+
+- MockPlannerView:
+A mock implementation of the IPlannerView interface used for testing purposes to simulate the view's
+behavior without requiring the full graphical interface.
+
+- SchedulingFrame:
+A JFrame subclass that provides a GUI for scheduling events. It works with PlannerSystem to assign
+scheduling strategies and update event details.
+
+- MainSystemView:
+This is the primary view of the the graphical interface for the planner system.
+
+- PlannerViewTextual:
+This is a textual representation of the planner dates.
+
+
+Extra Credit: LenientSchedulingStrategy class, and then run it on the PlannerRunner
