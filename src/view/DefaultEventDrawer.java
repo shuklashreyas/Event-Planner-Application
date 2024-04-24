@@ -1,11 +1,17 @@
 package view;
 
 import java.awt.*;
-import java.time.LocalDateTime;
 
 import model.Event;
 
-public class DefaultEventDrawer implements EventDrawer{
+/**
+ * This class represents the DefaultEventDrawer.
+ * This class is used to draw the event on the calendar.
+ * It handles the drawing of the event rectangle.
+ * As well as the color of the event rectangle.
+ * The color of the event rectangle is red for non-host events and cyan for host events.
+ */
+public class DefaultEventDrawer implements EventDrawer {
   @Override
   public void drawMainSystem(Graphics g, Event event, Dimension size, boolean isHost) {
     Graphics2D g2d = (Graphics2D) g.create();
@@ -21,43 +27,14 @@ public class DefaultEventDrawer implements EventDrawer{
     // Set a default color for non-host events
     g2d.setColor(Color.RED);
 
-   if(isHost) {
-     g2d.setColor(Color.CYAN);
-   }
-
-    // Draw the event
-    g2d.fillRect(startX, startY, size.width, height);
-
-    // Clean up
-    g2d.dispose();
-  }
-
-  @Override
-  public void drawSaturdayPlanner(Graphics g, Event event, int dayIndex, boolean isHost) {
-    Graphics2D g2d = (Graphics2D) g.create();
-
-    // Calculate the position and size of the event rectangle
-    int startX = dayIndex * 100;
-    int startY = event.getStartTime().getHour() * 20 +
-            event.getStartTime().getMinute() * 20 / 60;
-    int endY = event.getEndTime().getHour() * 20 +
-            event.getEndTime().getMinute() * 20 / 60;
-    int height = endY - startY;
-
-    // Set a default color for non-host events
-    g2d.setColor(Color.RED);
-
-    if(isHost) {
+    if (isHost) {
       g2d.setColor(Color.CYAN);
     }
 
     // Draw the event
-    g2d.fillRect(startX, startY, 100, height);
-
-    // Clean up
+    g2d.fillRect(startX, startY, size.width, height);
     g2d.dispose();
   }
-
 
 
 }

@@ -1,17 +1,11 @@
 package view;
 
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
 
 import controller.PlannerController;
 import model.AnytimeSchedulingStrategy;
-import model.Event;
 import model.LenientSchedulingStrategy;
 import model.PlannerSystem;
 import model.ISchedulingStrategy;
-import model.User;
 import model.WorkHoursSchedulingStrategy;
 
 /**

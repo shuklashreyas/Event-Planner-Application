@@ -16,7 +16,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.security.DigestException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,12 +53,12 @@ public class MainSystemFrame extends JFrame implements IPlannerView, IPlannerVie
 
   private JButton toggleHostButton;
   private JComboBox<String> userComboBox;
-  private IReadOnlyModel readOnlyModel;
+  private final IReadOnlyModel readOnlyModel;
 
   private List<Event> currentEvents;
   private IPlannerViewListener viewListener;
 
-  private EventDrawer eventDrawer;
+  private final EventDrawer eventDrawer;
 
   private boolean hostColorModeEnabled = false;
 
@@ -140,7 +139,6 @@ public class MainSystemFrame extends JFrame implements IPlannerView, IPlannerVie
   }
 
 
-
   private void initializeMenu() {
     JMenuBar menuBar = new JMenuBar();
     JMenu fileMenu = new JMenu("File");
@@ -167,18 +165,17 @@ public class MainSystemFrame extends JFrame implements IPlannerView, IPlannerVie
           String userName = (String) userComboBox.getSelectedItem();
           for (Event event : currentEvents) {
             // Only draw the event if the host color mode is disabled or the user is the host
-              boolean isHostEvent;
+            boolean isHostEvent;
 
-              Dimension size = new Dimension(getWidth() / 7, getHeight());
-              if(hostColorModeEnabled){
-                isHostEvent = userName.equals(event.getHostId());
-                eventDrawer.drawMainSystem(g, event, size, isHostEvent);
-              }
-              else {
-                isHostEvent = false;
-                eventDrawer.drawMainSystem(g, event, size, isHostEvent);
-              }
-              System.out.println("Drawing event: " + event.getName());
+            Dimension size = new Dimension(getWidth() / 7, getHeight());
+            if (hostColorModeEnabled) {
+              isHostEvent = userName.equals(event.getHostId());
+              eventDrawer.drawMainSystem(g, event, size, isHostEvent);
+            } else {
+              isHostEvent = false;
+              eventDrawer.drawMainSystem(g, event, size, isHostEvent);
+            }
+            System.out.println("Drawing event: " + event.getName());
 
           }
         }
@@ -231,17 +228,13 @@ public class MainSystemFrame extends JFrame implements IPlannerView, IPlannerVie
         }
       }
 
-      private boolean eventOccursDuringClick(Event event, int clickedDayIndex,
-                                             LocalTime timeClicked) {
+      private boolean eventOccursDuringClick(Event event, int clickedDayIndex, LocalTime timeClicked) {
         DayOfWeek dayOfWeekEventStart = event.getStartTime().getDayOfWeek();
         DayOfWeek dayOfWeekEventEnd = event.getEndTime().getDayOfWeek();
         DayOfWeek dayClicked = DayOfWeek.of(clickedDayIndex);
 
-        boolean isSameDay = (dayOfWeekEventStart.equals(dayClicked) || dayOfWeekEventEnd.
-                equals(dayClicked));
-        boolean isSameTime = (timeClicked.equals(event.getStartTime().toLocalTime())
-                || timeClicked.isAfter(event.getStartTime().toLocalTime()))
-                && (timeClicked.isBefore(event.getEndTime().toLocalTime()));
+        boolean isSameDay = (dayOfWeekEventStart.equals(dayClicked) || dayOfWeekEventEnd.equals(dayClicked));
+        boolean isSameTime = (timeClicked.equals(event.getStartTime().toLocalTime()) || timeClicked.isAfter(event.getStartTime().toLocalTime())) && (timeClicked.isBefore(event.getEndTime().toLocalTime()));
 
         return isSameDay && isSameTime;
       }
@@ -347,8 +340,7 @@ public class MainSystemFrame extends JFrame implements IPlannerView, IPlannerVie
 
       PlannerSystem plannerSystem = new PlannerSystem();
       User currentUser = new User("1", "Host");
-      boolean isUploaded = plannerSystem.uploadSchedule(selectedFile.getAbsolutePath(),
-              currentUser);
+      boolean isUploaded = plannerSystem.uploadSchedule(selectedFile.getAbsolutePath(), currentUser);
 
       for (Event event : currentUser.getSchedule().getEvents()) {
         System.out.println(event.getName());

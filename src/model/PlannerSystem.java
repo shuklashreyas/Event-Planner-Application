@@ -57,6 +57,7 @@ public class PlannerSystem implements IPlannerSystemModel {
     this.addUser(user1);
     this.addUser(user2);
   }
+
   @Override
   public void setSchedulingStrategy(ISchedulingStrategy schedulingStrategy) {
     this.schedulingStrategy = schedulingStrategy;
@@ -129,7 +130,8 @@ public class PlannerSystem implements IPlannerSystemModel {
           LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
 
 
-          Event event = new Event(name, startDateTime, endDateTime, place, isOnline, invitees, hostId);
+          Event event = new Event(name, startDateTime, endDateTime, place, isOnline,
+                  invitees, hostId);
           user.getSchedule().addEvent(event);
         }
       }
@@ -141,8 +143,11 @@ public class PlannerSystem implements IPlannerSystemModel {
       return false;
     }
   }
+
   private String removeQuotes(String text) {
-    if (text == null) return null;
+    if (text == null) {
+      return null;
+    }
     return text.replace("\"", "");  // Remove all double quotes
   }
 
@@ -365,7 +370,6 @@ public class PlannerSystem implements IPlannerSystemModel {
     }
     schedulingStrategy.scheduleEvent(event, user, this);
   }
-
 
 
 }

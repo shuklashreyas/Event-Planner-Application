@@ -2,15 +2,17 @@ import org.junit.Test;
 
 import model.Event;
 import model.SaturdayPlanner;
-import model.Schedule;
 import model.User;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
 
+/**
+ * This class tests the SaturdayPlanner class.
+ * It tests the getEventsForWeekStarting method.
+ */
 public class SaturdayPlannerTest {
 
   @Test
@@ -21,9 +23,9 @@ public class SaturdayPlannerTest {
     planner.uploadSchedule("jane.xml", user);
 
     List<Event> events = planner.getEventsForWeekStarting(user, saturday);
-     for (Event event : events) {
-       System.out.println(event.getName());
-     }
+    for (Event event : events) {
+      System.out.println(event.getName());
+    }
     assertEquals("Expected number of events does not match", 2, events.size());
   }
 }
